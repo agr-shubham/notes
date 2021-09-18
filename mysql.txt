@@ -327,3 +327,12 @@ CREATE TABLE likes (						//Multiple primary key
     FOREIGN KEY(photo_id) REFERENCES photos(id),
     PRIMARY KEY(user_id, photo_id)
 );
+
+SELECT username, 							//Having is used instead of where when there is group by
+       Count(*) AS num_likes 
+FROM   users 
+       INNER JOIN likes 
+               ON users.id = likes.user_id 
+GROUP  BY likes.user_id 
+HAVING num_likes = (SELECT Count(*) 
+                    FROM   photos); 
