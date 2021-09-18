@@ -1,0 +1,141 @@
+Git
+
+SETUP
+
+git --version
+
+git config --global user.name "name"
+
+git config --global user.email emailid
+
+git config --global core.editor "code --wait"
+
+git config --global -e
+
+git config --global core.autocrlf true //for windows
+
+git <command> --help
+
+git <command> -h //short help
+
+git config --global diff.tool vscode //setup diff in vscode
+
+git config --global difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE" // check if this exact line is copied in (git config --global -e)
+
+
+CREATING A SNAPSHOT
+
+git init //intitializing a repository
+
+ls -a //show hidden files
+
+git ls-files //list files in staging area
+
+git add file1.txt file2.txt // add to staging area
+
+git add . //add entire folder to staging area
+
+//if you now delete file2.txt do git add file2.txt to remove from staging area
+
+git commit -m "message" //save snapshot to repo
+
+git commit //opens VSCode. You can you commit message there
+
+git status //shows status of untracked files, uncommitted files, modifiled files, commits
+
+git status -s //short status 1st column staging area, 2nd column working directory(M-modified, A-added ,red->not added to staging area)
+
+git commit -a -m "message" //Used to skip add, just commits all new and modified files
+
+rm file2.txt //deleted file from directory but not staging area
+
+git add file2.txt //Now deletes file from staging area
+
+git rm file2.txt //Delete files from both working directory and staging area
+
+git rm --cached filename //Deletes file from staging area only
+
+//if you rename a file you need to git add both old and new file name
+
+git mv main.js file1.js //renames file in both working directory and staging area
+
+echo logs/ > .gitignore //ignore logs folder 
+
+code .gitignore //open .gitignore in VSCode
+
+//then git add .gitignore
+
+git restore --staged filename //restore staged file to previous commit version
+
+git restore filename //restore all changes in working directory and staged files to previous commit. No changes to untracked files
+
+git clean -fd //restore entire directory to previous commit version. Untracked files deleted
+
+
+
+DIFF
+
+git diff //shows diff between unstaged and staged
+
+git diff --staged //diff between staged and last commit
+
+git difftool //show diff in vscode. can use --staged too
+
+git diff HEAD~2 HEAD //diff between all the files between these 2 commits
+
+git diff HEAD~2 HEAD filename //diff in that file between these 2 commits
+
+LOGS
+
+git log //shows all commits. click space to go to next page
+
+git log --oneline //short git log
+
+git log --oneline --reverse //git short in reverse order
+
+git log --oneline --stat //shows all files that have been changed in all commits
+
+git log --oneline --patch //show differences in all files in all commits
+
+git log --oneline -3 //shows last 3 commits
+
+git log --oneline --author="authorname" //filter by author
+
+git log --oneline --after="2020-08-17" //filter by date. "yesterday" and "one week ago" also works
+
+git log --oneline --grep="message part" //filter by part of a message(case sensitive)
+
+git log --oneline fb0d184..edb2594 //shows only commits between these commits
+
+git log --oneline filename //shows commits where file has been edited
+
+git show <commitId> // shows commit details commitId can be prefix of actual id, HEAD~number
+
+git show HEAD~1:filename //shows content of that file in that commit
+
+git ls-tree HEAD~1 //shows all files in that commit with fileId. 
+
+git show fileIdPrefix //shows the the content of the file at that file id
+
+git show HEAD~2 --name-only //shows files changed in that commit
+
+git show HEAD~2 --name-status //shows files changed in that commit with status
+
+git shortlog //gives all contributers and their commits
+
+
+RESTORING
+
+git restore --source=HEAD~1 filename //restore file to previous version
+
+git checkout commitId //changes working directory to that commit. But we are in detached head state(head not pointing to master)
+
+git checkout master //to go back to master
+
+git bisect start //to debug with binary search
+
+git checkout commitid filename //restores file to that version of commit in working directory and staging area
+
+git blame filename // shows changes with authorname
+
+git tag v1.0 commitid //tags the commit
