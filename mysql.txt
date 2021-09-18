@@ -1,0 +1,329 @@
+show databases;					//List available databases
+
+CREATE DATABASE database_name;			//The general command for creating a database
+
+DROP DATABASE database_name;			//To drop a database
+
+USE <database name>;				//To work on database
+  
+SELECT database(); 				//Show current database
+
+CREATE TABLE tablename	  			//Create table
+  (
+    column_name data_type,
+    column_name data_type
+  );
+
+SHOW TABLES; 					//Show all tables in database
+ 
+SHOW COLUMNS FROM tablename; 			//Show all columns in table
+ 
+DESC tablename; 				//Show description of table
+
+DROP TABLE <tablename>; 			//Delete table
+
+INSERT INTO table_name 				//Inserting data to table
+            (column_name, column_name) 
+VALUES      (value, value), 
+            (value, value), 
+            (value, value);  			
+
+
+SHOW WARNINGS; 					//To view the warnings
+
+CREATE TABLE cats2				//Define a table with NOT NULL constraint
+  (
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL
+  );
+
+CREATE TABLE cats3				//Define a table with a DEFAULT name specified
+  (
+    name VARCHAR(20) DEFAULT 'no name provided',
+    age INT DEFAULT 99
+  );
+
+CREATE TABLE cats4				//Combine NOT NULL and DEFAULT
+  (
+    name VARCHAR(20) NOT NULL DEFAULT 'unnamed',
+    age INT NOT NULL DEFAULT 99
+  );
+  
+CREATE TABLE unique_cats			//Define a table with a PRIMARY KEY constraint
+  (
+    cat_id INT NOT NULL,
+    name VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+  );
+
+CREATE TABLE unique_cats2 (			//Adding in AUTO_INCREMENT:
+    cat_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+);
+
+Various Simple SELECT statements:
+SELECT * FROM cats; 				//Selecting all data from table
+
+SELECT name, age FROM cats; 			//Selecting particular columns from table
+
+SELECT * FROM cats WHERE age=4; 		//Selecting with where constrainst on int
+
+SELECT * FROM cats WHERE name='Egg'; 		//Selecting with where constrainst on String. It is case insensitive
+
+SELECT name AS 'cat name', breed AS 'kitty breed' FROM cats; 	//Adding alias
+
+UPDATE cats SET breed='Shorthair' WHERE breed='Tabby'; 		//Updating data
+ 
+DELETE FROM cats WHERE name='Egg';				//Deleting data
+ 
+DELETE FROM cats;						//Deleing all data but table remains
+
+source first_file.sql				//Running sql file. check path if it is in working directory
+
+SELECT						//Concat string columns
+  CONCAT(author_fname, ' ', author_lname)
+  AS 'full name'
+FROM books;
+
+SELECT 								//Concat columns with setparater defined in 1st arg
+    CONCAT_WS(' - ', title, author_fname, author_lname) 
+FROM books;
+
+SELECT SUBSTRING('Hello World', 1, 4);				//Hell//Substring starts from index 1 to index 4
+
+SELECT SUBSTRING('Hello World', 7);				//World//Index 7 to end
+
+SELECT SUBSTRING('Hello World', -3);				//rld//Last 3 characters
+
+SELECT REPLACE('Hello World', 'Hell', '%$#@');			//%$#@o World//Case sensetive
+
+SELECT REVERSE('Hello World');					//dlroW olleH//Reverse
+
+SELECT CHAR_LENGTH('Hello World');				//11//Length of string
+
+SELECT UPPER('Hello World');					//Covert to all uppper case
+ 
+SELECT LOWER('Hello World');					//Covert to all lower case
+
+SELECT DISTINCT author_fname, author_lname FROM books; 		//Distinct applies to entire row
+
+SELECT author_lname FROM books ORDER BY author_lname;		//Asc order by author_lname
+
+SELECT author_lname FROM books ORDER BY author_lname DESC;	//Desc order by author_lname
+
+SELECT title, pages FROM books ORDER BY released_year;		//Not necessary to be persent in select
+
+SELECT title, author_fname, author_lname 			//Orders by author_fname because 2 nd column selected
+FROM books ORDER BY 2;
+
+SELECT author_fname, author_lname FROM books 			//Orders by author_lname then author_fname
+ORDER BY author_lname, author_fname;
+
+SELECT title, released_year FROM books 				//Gives first 5 books
+ORDER BY released_year DESC LIMIT 5;
+
+SELECT title, released_year FROM books 				//Gives first 5 books//Index starts from 0. 2nd argument is number of results 
+ORDER BY released_year DESC LIMIT 0,5;
+
+SELECT title FROM books LIMIT 5, 123219476457;			//Gives 6th to last book
+
+SELECT title, author_fname FROM books				//case insensitve. %->any number of characters 
+WHERE author_fname LIKE '%da%';	
+
+SELECT title, stock_quantity FROM books 			//-means 1 character. this query gives results where quantity is in 4 digits
+WHERE stock_quantity LIKE '____';
+
+SELECT title FROM books WHERE title LIKE '%\%%'			//if % is there in string then use escape character
+ 
+SELECT title FROM books WHERE title LIKE '%\_%'			//if _ is there in string then use escape character
+
+SELECT COUNT(*) FROM books;					//Count all the books
+
+SELECT COUNT(DISTINCT author_fname) FROM books;			//Count number of auther_fnames
+
+SELECT COUNT(DISTINCT author_lname, author_fname) FROM books;	//Count number of authors
+
+SELECT COUNT(*) FROM books WHERE title LIKE '%the%';		//Count with where condition
+
+SELECT author_lname, COUNT(*) 					//Count for each author_lname group
+FROM books GROUP BY author_lname;
+
+SELECT author_fname, author_lname, COUNT(*)			//Groups by both fname and lname and counts 
+FROM books GROUP BY author_lname, author_fname;
+
+SELECT MIN(pages) FROM books;					//Count min pages from all books
+
+SELECT MAX(pages) FROM books;					//Count max pages from all books
+
+SELECT * FROM books 						//Find book with min pages
+WHERE pages = (SELECT Min(pages) 
+                FROM books); 
+
+SELECT * FROM books 						//Find book with min pages better complexity
+ORDER BY pages ASC LIMIT 1;
+
+SELECT author_fname, author_lname, Max(pages)			//Find max pages book for each author
+FROM books GROUP BY author_lname, author_fname;
+
+SELECT SUM(pages) FROM books;					//Find sum of all pages
+
+SELECT author_fname, author_lname, Sum(pages)			//Find total pages by author
+FROM books GROUP BY author_lname, author_fname;
+
+SELECT AVG(pages) FROM books;					//Find avg pages of all books
+
+SELECT author_fname, author_lname, AVG(pages) FROM books	//Find avg pages for each author
+GROUP BY author_lname, author_fname;
+
+CREATE TABLE dogs (name CHAR(5), breed VARCHAR(10));		//Datatype CHAR creates fixed length data. Pad spaces to right or truncates data
+
+CREATE TABLE items(price DECIMAL(5,2));				//Datatype DECIMAL. Maximum 5 digits with 2 after decimal. 213612.142->999.99
+
+CREATE TABLE thingies (price FLOAT);				//Datatype FLOAT. Precision of 6 digits. Gives first 6 digits from left properly then rounds up to 0s
+
+CREATE TABLE thingies (price DOUBLE);				//Datatype DOUBLE. Precision of 14 digits. Gives first 14 digits from left properly then rounds up to 0s
+
+CREATE TABLE people (name VARCHAR(100), birthdate DATE, 	//Datatype DATE->YYYY-MM-DD, TIME->HH:MM::SS, DATETIME-> YYYY-MM-DD HH:MM::SS
+birthtime TIME, birthdt DATETIME);
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)	//Check Format while inserting
+VALUES('Larry', '1943-12-25', '04:10:42', '1943-12-25 04:10:42');
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)	//CURDATE() gives current date, CURTIME() give current time, NOW() gives current datetime
+VALUES('name2', CURDATE(), CURTIME(), NOW());
+
+SELECT birthdate, DAYNAME(birthdate) FROM people;		//Friday//Many function like this exist
+
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y') FROM people;		//25/12/1943//many more formatters available
+
+SELECT DATEDIFF(NOW(), birthdate) FROM people;			//Date diff function
+
+SELECT birthdt, DATE_ADD(birthdt, INTERVAL 10 SECOND) FROM people;		//Date Time math
+
+SELECT birthdt, birthdt + INTERVAL 15 MONTH + INTERVAL 10 HOUR FROM people;	//Date Time math
+
+CREATE TABLE comments (						//Datatype TIMESTAMP same as datetime but store between 1970 to 2039 only. Save space
+    content VARCHAR(100),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE comments2 (					//Updates timestamp whenever row is updated
+    content VARCHAR(100),
+    changed_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW()
+);
+
+SELECT title FROM books WHERE released_year != 2017;		//Where not equals
+
+SELECT title FROM books WHERE title NOT LIKE 'W%';		//Where not like
+
+SELECT  title, author_lname, released_year FROM books		//AND or && can be used
+WHERE author_lname='Eggers' AND released_year > 2010;
+
+SELECT  title, author_lname, released_year FROM books		//OR or || can be used
+WHERE author_lname='Eggers' OR released_year > 2010;
+
+SELECT title, released_year FROM books 				//BETWEEN...AND.. same as <= && >=
+WHERE released_year BETWEEN 2004 AND 2015;
+
+SELECT title, released_year FROM books 				//NOT BETWEEN...AND.. same as > && <
+WHERE released_year NOT BETWEEN 2004 AND 2015;			
+
+SELECT name, birthdt FROM people				//For Dates you should cast
+WHERE birthdt BETWEEN CAST('1980-01-01' AS DATETIME)
+    AND CAST('2000-01-01' AS DATETIME);
+
+SELECT title, author_lname FROM books				//IN operator
+WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+
+SELECT title, author_lname FROM books				//NOT IN operator
+WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
+
+SELECT title,							//IF ELSE IN MYSQL
+    CASE 
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 51 AND 100 THEN '**'
+        ELSE '***'
+    END AS STOCK
+FROM books;
+
+IF(Count(rating) > 0, 'ACTIVE', 'INACTIVE') AS STATUS 		//IF alternate syntax
+
+CREATE TABLE orders(						//Foreign Key syntax
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY(customer_id) REFERENCES customers(id)
+);
+
+SELECT * FROM customers, orders;				//Cross join. Useless. Give every combination
+
+SELECT * FROM customers, orders 				//Implicit Inner Join
+WHERE customers.id = orders.customer_id;
+
+SELECT * FROM customers						//Explicit Inner Join(INNER JOIN also works)
+JOIN orders
+ON customers.id = orders.customer_id;
+
+SELECT * FROM customers						//Left Join. Gives all values from customer even if orders table does not contain it
+LEFT JOIN orders
+    ON customers.id = orders.customer_id;
+
+SELECT 								//IFNULL condition
+    first_name, 
+    last_name,
+    IFNULL(SUM(amount), 0) AS total_spent
+FROM customers
+LEFT JOIN orders
+    ON customers.id = orders.customer_id
+GROUP BY customers.id;
+
+SELECT * FROM orders						//Right Join. Similar to left join
+RIGHT JOIN customers
+    ON customers.id = orders.customer_id;
+
+CREATE TABLE orders(						//ON delete cascade. Deletes orders if customer is deleted
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY(customer_id) 
+        REFERENCES customers(id)
+        ON DELETE CASCADE
+);
+
+
+
+AVOID USING NATURAl JOIN					//VVIMP
+
+CREATE TABLE reviews (						//For many to many relations
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rating DECIMAL(2,1),
+    series_id INT,
+    reviewer_id INT,
+    FOREIGN KEY(series_id) REFERENCES series(id),
+    FOREIGN KEY(reviewer_id) REFERENCES reviewers(id)
+);
+
+SELECT 								//Join 3 Tables
+    title,
+    rating,
+    CONCAT(first_name,' ', last_name) AS reviewer
+FROM reviewers
+INNER JOIN reviews 
+    ON reviewers.id = reviews.reviewer_id
+INNER JOIN series
+    ON series.id = reviews.series_id
+ORDER BY title;
+
+CREATE TABLE likes (						//Multiple primary key
+    user_id INTEGER NOT NULL,
+    photo_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(photo_id) REFERENCES photos(id),
+    PRIMARY KEY(user_id, photo_id)
+);
