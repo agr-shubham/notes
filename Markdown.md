@@ -29,6 +29,8 @@ int b = 1;
 Systemout.println(a+b);
 ```
 
+You can also use single ticks for small code `sample code here`
+
 ### Links
 [display text](link)   
 [Click here](https://www.google.com)  
