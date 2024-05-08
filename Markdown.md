@@ -88,4 +88,12 @@ or
 
 ### Checklist (extended)
 - [ ] item 1
-- [X] item 2
+- [X] item 2  
+
+ using
+
+`- [ ] item 1`  
+`- [X] item 2`
+
+
+**Please Check markdown for this file for clarity**
