@@ -1,4 +1,4 @@
-# Basics
+# Markdown Basics
 
 ### Paragraph
 Everything with out any special character is treated as a html paragraph.
