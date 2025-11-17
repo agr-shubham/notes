@@ -336,3 +336,10 @@ FROM   users
 GROUP  BY likes.user_id 
 HAVING num_likes = (SELECT Count(*) 
                     FROM   photos); 
+
+CREATE VIEW user_spending AS    //Views - Can reuse a custom query 
+SELECT users.username, SUM(amount) AS total_spent
+FROM users
+JOIN orders ON users.id = orders.user_id
+GROUP BY users.id;
+SELECT * FROM user_spending;
